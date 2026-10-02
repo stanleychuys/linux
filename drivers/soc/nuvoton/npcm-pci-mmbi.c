@@ -343,16 +343,10 @@ static void update_host_rop(struct npcm_mmbi_channel *channel,
 		hrop.h2b_rp);
 
 	/* Advance the B2H CB offset for next write */
-	if ((hrop.b2h_wp + w_len) <= channel->b2h_cb_size)
-		hrop.b2h_wp += w_len;
-	else
-		hrop.b2h_wp = hrop.b2h_wp + w_len - channel->b2h_cb_size;
+	hrop.b2h_wp = (hrop.b2h_wp + w_len) % channel->b2h_cb_size;
 
 	/* Advance the H2B CB offset till where BMC read data */
-	if ((hrop.h2b_rp + r_len) <= channel->h2b_cb_size)
-		hrop.h2b_rp += r_len;
-	else
-		hrop.h2b_rp = hrop.h2b_rp + r_len - channel->h2b_cb_size;
+	hrop.h2b_rp = (hrop.h2b_rp + r_len) % channel->h2b_cb_size;
 
 	/*
 	 * Clear BMC reset request state its set:
