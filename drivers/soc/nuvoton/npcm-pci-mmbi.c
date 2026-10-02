@@ -716,7 +716,7 @@ static ssize_t mmbi_write(struct file *filp, const char *buffer, size_t len,
 	} else {
 		chunk_len = end_offset - wt_offset;
 		memcpy(channel->b2h_cb_vmem + wt_offset, &header, chunk_len);
-		memcpy(channel->b2h_cb_vmem, &header + chunk_len,
+		memcpy(channel->b2h_cb_vmem, (u8 *)(&header) + chunk_len,
 		       (sizeof(header) - chunk_len));
 		wt_offset = (sizeof(header) - chunk_len);
 	}
